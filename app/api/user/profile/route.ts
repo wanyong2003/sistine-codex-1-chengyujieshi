@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
         emailVerified: userTable.emailVerified,
         image: userTable.image,
         credits: userTable.credits,
+        subscriptionQueries: userTable.subscriptionQueries,
         createdAt: userTable.createdAt,
       })
       .from(userTable)
@@ -99,6 +100,7 @@ export async function PATCH(req: NextRequest) {
         emailVerified: userTable.emailVerified,
         image: userTable.image,
         credits: userTable.credits,
+        subscriptionQueries: userTable.subscriptionQueries,
         createdAt: userTable.createdAt,
       });
 

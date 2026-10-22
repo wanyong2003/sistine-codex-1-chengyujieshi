@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, integer, varchar, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, integer, varchar, index, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -8,6 +8,8 @@ export const user = pgTable("user", {
   image: text("image"),
   // total available credits for the user
   credits: integer("credits").default(0).notNull(),
+  // subscription queries are reset by each successful subscription cycle
+  subscriptionQueries: integer("subscription_queries").default(0).notNull(),
   // user role: 'admin' | 'user'
   role: text("role").default("user").notNull(),
   // current subscription plan
@@ -109,6 +111,22 @@ export const creditLedger = pgTable("credit_ledger", {
   paymentId: text("payment_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+// Daily quota bookkeeping only. Query content is intentionally not stored.
+export const queryUsage = pgTable(
+  "query_usage",
+  {
+    id: text("id").primaryKey(),
+    scopeKey: text("scope_key").notNull(),
+    usageDate: varchar("usage_date", { length: 10 }).notNull(),
+    successfulCount: integer("successful_count").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()).notNull(),
+  },
+  table => ({
+    scopeDateUnique: uniqueIndex("query_usage_scope_scope_date_unique").on(table.scopeKey, table.usageDate),
+  }),
+);
 
 export const subscriptionCreditSchedule = pgTable(
   "subscription_credit_schedule",

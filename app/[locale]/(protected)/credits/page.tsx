@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/button";
 import { Container } from "@/components/container";
 import { Background } from "@/components/background";
@@ -17,6 +18,7 @@ import type {
 
 export default function CreditsPage() {
   const session = useSession();
+  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('credits');
   const tCommon = useTranslations('common');
@@ -81,18 +83,10 @@ export default function CreditsPage() {
 
   const startCheckout = useCallback(
     async (planKey: string) => {
-      const userId = session.data?.user?.id;
-      if (!userId) return;
-      const res = await fetch("/api/payments/creem/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: planKey, kind: "one_time" }),
-      });
-      if (!res.ok) return;
-      const { url } = (await res.json()) as { url: string };
-      window.location.href = url;
+      void planKey;
+      router.push(`/${locale}/pricing`);
     },
-    [session.data?.user?.id]
+    [locale, router]
   );
 
   const credits = userProfile?.credits ?? 0;

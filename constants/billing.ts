@@ -6,7 +6,7 @@ export type PlanKey =
   | "pro_monthly"
   | "pro_yearly";
 
-export type PackKey = "pack_200";
+export type PackKey = "pack_100";
 
 export type GrantScheduleConfig =
   | {
@@ -49,7 +49,7 @@ export const subscriptionPlans: Record<PlanKey, SubscriptionPlan> = {
     currency: "usd",
     creditsPerCycle: 1000,
     cycle: "month",
-    creemPriceId: "prod_6oSIwPL8m6scklr3fwdkC9",
+    creemPriceId: "prod_15Lg98rscWbq43aOg1GSu3",
     grantSchedule: { mode: "per_cycle" },
   },
   starter_yearly: {
@@ -59,7 +59,7 @@ export const subscriptionPlans: Record<PlanKey, SubscriptionPlan> = {
     currency: "usd",
     creditsPerCycle: 12000,
     cycle: "year",
-    creemPriceId: "prod_2V1LbGt2bLmZpKgmASTiCN",
+    creemPriceId: "prod_400Ofo5usOjFq2ZWcqJrpy",
     grantSchedule: {
       mode: "installments",
       grantsPerCycle: 12,
@@ -75,7 +75,7 @@ export const subscriptionPlans: Record<PlanKey, SubscriptionPlan> = {
     currency: "usd",
     creditsPerCycle: 10000,
     cycle: "month",
-    creemPriceId: "prod_5Xzh9qV5TWeTQtRxjZPEHM",
+    creemPriceId: "prod_16xECifD4g4vXKIbWtkRQt",
     grantSchedule: { mode: "per_cycle" },
   },
   pro_yearly: {
@@ -85,7 +85,7 @@ export const subscriptionPlans: Record<PlanKey, SubscriptionPlan> = {
     currency: "usd",
     creditsPerCycle: 120000,
     cycle: "year",
-    creemPriceId: "prod_2xyljTJW1IlT8FUDrucU3X",
+    creemPriceId: "prod_5ikSM8Yy10Qcc2hgnEXfDo",
     grantSchedule: {
       mode: "installments",
       grantsPerCycle: 12,
@@ -97,13 +97,13 @@ export const subscriptionPlans: Record<PlanKey, SubscriptionPlan> = {
 };
 
 export const oneTimePacks: Record<PackKey, OneTimePack> = {
-  pack_200: {
-    key: "pack_200",
+  pack_100: {
+    key: "pack_100",
     kind: "one_time",
     priceCents: 500,
     currency: "usd",
-    credits: 200,
-    creemPriceId: "prod_3SiroZeMbMQidMVFDMUzKy",
+    credits: 100,
+    creemPriceId: "prod_6KOKpJVJpPE8OZJjxomp0i",
   },
 };
 

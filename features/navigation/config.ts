@@ -16,33 +16,12 @@ type NavigationKeyItem = {
 // These are the navigation keys for translation
 export const marketingNavigationKeys: NavigationKeyItem[] = [
   {
-    key: "demo",
-    href: "/demo",
-    subItems: [
-      {
-        key: "chat",
-        href: "/demo/chat",
-        icon: "MessageSquare",
-      },
-      {
-        key: "image",
-        href: "/demo/image",
-        icon: "Image",
-      },
-      {
-        key: "video",
-        href: "/demo/video",
-        icon: "Video",
-      },
-    ],
+    key: "idiom",
+    href: "/idiom",
   },
   {
     key: "pricing",
     href: "/pricing",
-  },
-  {
-    key: "blog",
-    href: "/blog",
   },
   {
     key: "contact",
@@ -73,16 +52,12 @@ export const appNavigationKeys: NavigationKeyItem[] = [
 // Legacy exports for compatibility
 export const marketingNavigation: NavigationItem[] = [
   {
-    title: "Demo",
-    href: "/demo",
+    title: "成语解释器",
+    href: "/idiom",
   },
   {
     title: "Pricing",
     href: "/pricing",
-  },
-  {
-    title: "Blog",
-    href: "/blog",
   },
   {
     title: "Contact",

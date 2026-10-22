@@ -79,11 +79,10 @@ describe("marketing pricing", () => {
     render(<Pricing />);
 
     expect(screen.getByRole("heading", { name: "Starter" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Pro" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Credits Pack" })).toBeInTheDocument();
     expect(screen.getByText("$29")).toBeInTheDocument();
-    expect(screen.getByText("$99")).toBeInTheDocument();
     expect(screen.getByText("$5")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Pro" })).not.toBeInTheDocument();
     expect(screen.queryByText("Free")).not.toBeInTheDocument();
     expect(screen.queryByText("Enterprise")).not.toBeInTheDocument();
     expect(screen.queryByText("Professional")).not.toBeInTheDocument();
@@ -93,11 +92,10 @@ describe("marketing pricing", () => {
     render(<PricingTable />);
 
     expect(screen.getByRole("columnheader", { name: "Starter" })).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "Pro" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "Credits Pack" })).toBeInTheDocument();
     expect(screen.getByText("1,000 / month")).toBeInTheDocument();
-    expect(screen.getByText("10,000 / month")).toBeInTheDocument();
-    expect(screen.getByText("200 once")).toBeInTheDocument();
+    expect(screen.getByText("100 once")).toBeInTheDocument();
+    expect(screen.queryByRole("columnheader", { name: "Pro" })).not.toBeInTheDocument();
     expect(screen.queryByRole("columnheader", { name: "Free" })).not.toBeInTheDocument();
     expect(screen.queryByRole("columnheader", { name: "Enterprise" })).not.toBeInTheDocument();
   });

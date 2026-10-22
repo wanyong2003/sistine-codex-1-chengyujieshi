@@ -14,6 +14,7 @@ export async function createChatCompletion(
     temperature?: number;
     top_p?: number;
     max_tokens?: number;
+    signal?: AbortSignal;
   }
 ): Promise<ChatResponse> {
   validateConfig();
@@ -32,6 +33,7 @@ export async function createChatCompletion(
   const response = await fetch(`${volcanoEngineConfig.apiUrl}/chat/completions`, {
     method: 'POST',
     headers: getHeaders(),
+    signal: options?.signal,
     body: JSON.stringify(request),
   });
 

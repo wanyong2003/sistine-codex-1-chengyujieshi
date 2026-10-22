@@ -14,8 +14,8 @@ export const Footer = () => {
       href: "/pricing",
     },
     {
-      name: t('navigation.main.blog'),
-      href: "/blog",
+      name: t('navigation.main.idiom'),
+      href: "/idiom",
     },
     {
       name: t('navigation.main.contact'),

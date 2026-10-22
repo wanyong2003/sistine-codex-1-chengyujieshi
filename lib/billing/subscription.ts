@@ -2,7 +2,7 @@ import { addMonths } from "date-fns";
 import { randomUUID } from "crypto";
 import { db } from "@/lib/db";
 import { creditLedger, subscriptionCreditSchedule, user as userTable } from "@/lib/db/schema";
-import { sql, and, eq, lte, gt } from "drizzle-orm";
+import { and, eq, lte, gt } from "drizzle-orm";
 import {
   type PlanKey,
   subscriptionPlans,
@@ -191,7 +191,7 @@ export async function processDueSchedules(limit = 50, catchUpPerSchedule: number
 
         await tx
           .update(userTable)
-          .set({ credits: sql`${userTable.credits} + ${grantAmount}` })
+          .set({ subscriptionQueries: grantAmount })
           .where(eq(userTable.id, schedule.userId));
 
         await tx.insert(creditLedger).values({

@@ -70,18 +70,9 @@ export default function DashboardPage() {
   
   const startCheckout = useCallback(
     async () => {
-      const userId = session.data?.user?.id;
-      if (!userId) return;
-      const res = await fetch("/api/payments/creem/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: defaultPack.key, kind: "one_time" }),
-      });
-      if (!res.ok) return;
-      const { url } = (await res.json()) as { url: string };
-      window.location.href = url;
+      router.push(`/${locale}/pricing`);
     },
-    [defaultPack.key, session.data?.user?.id]
+    [locale, router]
   );
 
   // Authentication is already handled in the layout
@@ -221,7 +212,7 @@ export default function DashboardPage() {
                 <Button
                   variant="outline"
                   className="w-full justify-start transition-colors"
-                  onClick={() => router.push(`/${locale}/credits`)}
+                  onClick={() => router.push(`/${locale}/pricing`)}
                 >
                   {t('cards.statistics.viewCredits')}
                 </Button>

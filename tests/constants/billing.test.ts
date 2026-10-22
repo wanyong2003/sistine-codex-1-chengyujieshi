@@ -9,11 +9,11 @@ describe("billing config", () => {
   it("exposes supported subscription keys", () => {
     expect(isSubscriptionKey("starter_monthly")).toBe(true);
     expect(isSubscriptionKey("starter_yearly")).toBe(true);
-    expect(isSubscriptionKey("pack_200")).toBe(false);
+    expect(isSubscriptionKey("pack_100")).toBe(false);
   });
 
   it("exposes supported one-time pack keys", () => {
-    expect(isPackKey("pack_200")).toBe(true);
+    expect(isPackKey("pack_100")).toBe(true);
     expect(isPackKey("pro_monthly")).toBe(false);
   });
 

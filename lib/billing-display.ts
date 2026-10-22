@@ -5,19 +5,13 @@ import {
   subscriptionPlans,
 } from "@/constants/billing";
 
-export const DEFAULT_ONE_TIME_PACK_KEY: PackKey = "pack_200";
+export const DEFAULT_ONE_TIME_PACK_KEY: PackKey = "pack_100";
 export const MARKETING_SUBSCRIPTION_PLAN_FAMILIES = [
   {
     id: "starter",
     monthlyKey: "starter_monthly",
     yearlyKey: "starter_yearly",
     featured: false,
-  },
-  {
-    id: "pro",
-    monthlyKey: "pro_monthly",
-    yearlyKey: "pro_yearly",
-    featured: true,
   },
 ] as const;
 

@@ -11,7 +11,6 @@ import {
   IconLogout,
   IconLayoutDashboard,
   IconShield,
-  IconCoins,
   IconSettings,
 } from "@tabler/icons-react";
 
@@ -142,15 +141,6 @@ export function UserMenu() {
                 {t('Admin.sidebar.title')}
               </Link>
             )}
-
-            <Link
-              href={`/${locale}/credits`}
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 px-4 py-2 text-sm text-muted-foreground hover:bg-hover transition-colors"
-            >
-              <IconCoins className="w-4 h-4" />
-              {t('navigation.main.credits')}
-            </Link>
 
             <Link
               href={`/${locale}/profile`}

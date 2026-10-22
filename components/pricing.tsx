@@ -17,6 +17,8 @@ type BillingTab = "monthly" | "yearly";
 
 export function Pricing() {
   const [active, setActive] = useState<BillingTab>("monthly");
+  const [agreed, setAgreed] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
   const session = useSession();
   const router = useRouter();
   const t = useTranslations("pricing");
@@ -38,20 +40,27 @@ export function Pricing() {
         return;
       }
 
+      if (!agreed) {
+        setCheckoutError("请先阅读并同意服务条款、隐私政策和退款政策。");
+        return;
+      }
+
       const res = await fetch("/api/payments/creem/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key, kind }),
+        body: JSON.stringify({ key, kind, agreedToTerms: true }),
       });
 
       if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setCheckoutError(data.error || "暂时无法创建支付订单，请稍后重试。");
         return;
       }
 
       const { url } = (await res.json()) as { url: string };
       window.location.href = url;
     },
-    [locale, router, userId]
+    [agreed, locale, router, userId]
   );
 
   return (
@@ -77,6 +86,27 @@ export function Pricing() {
           </button>
         ))}
       </div>
+
+      <label className="mx-auto mb-8 flex max-w-2xl items-start gap-2 text-sm text-muted-foreground">
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={(event) => {
+            setAgreed(event.target.checked);
+            setCheckoutError("");
+          }}
+          className="mt-1"
+        />
+        <span>
+          我已阅读并同意
+          <a className="mx-1 underline" href={`/${locale}/terms`}>服务条款</a>、
+          <a className="mx-1 underline" href={`/${locale}/privacy`}>隐私政策</a>和
+          <a className="mx-1 underline" href={`/${locale}/refund`}>退款政策</a>。
+        </span>
+      </label>
+      {checkoutError && (
+        <p className="mx-auto mb-8 max-w-2xl text-center text-sm text-red-600">{checkoutError}</p>
+      )}
 
       <div className="relative z-20 mx-auto mt-4 grid grid-cols-1 items-stretch gap-4 md:mt-20 md:grid-cols-2 xl:grid-cols-3">
         {subscriptionPlans.map((plan) => {

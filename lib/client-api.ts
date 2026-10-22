@@ -11,6 +11,7 @@ export interface ClientUserProfile {
   emailVerified: boolean;
   image: string | null;
   credits: number;
+  subscriptionQueries: number;
   createdAt: string | Date;
   subscription: ClientSubscriptionSummary | null;
 }

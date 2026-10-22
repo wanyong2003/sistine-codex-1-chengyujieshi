@@ -115,6 +115,11 @@ export async function POST(req: NextRequest) {
   try {
     // Handle Creem webhook structure
     const type = event.eventType;
+    const isSubscriptionCancellation = [
+      "subscription.canceled",
+      "subscription.cancelled",
+      "subscription.expired",
+    ].includes(type || "");
     
     // Only log important events
     if (type === "checkout.completed" || type === "subscription.paid") {
@@ -144,7 +149,11 @@ export async function POST(req: NextRequest) {
         metadata?.subscriptionId;
       amountCents = mainObject?.order?.amount || 0;
       currency = mainObject?.order?.currency || "USD";
-    } else if (type === "subscription.paid" || type === "subscription.active") {
+    } else if (
+      type === "subscription.paid" ||
+      type === "subscription.active" ||
+      isSubscriptionCancellation
+    ) {
       // For subscription events, metadata should be in the subscription object
       metadata = mainObject?.metadata || {};
       subscriptionId = mainObject?.id;
@@ -160,6 +169,33 @@ export async function POST(req: NextRequest) {
     const userId = metadata.userId;
     const key = metadata.key;
     const kind = metadata.kind;
+
+    if (isSubscriptionCancellation && subscriptionId) {
+      const subscriptionRows = await db
+        .select({ userId: subscriptionTable.userId })
+        .from(subscriptionTable)
+        .where(eq(subscriptionTable.providerSubId, subscriptionId))
+        .limit(1);
+      const subscriptionUserId = subscriptionRows[0]?.userId;
+
+      await db
+        .update(subscriptionTable)
+        .set({
+          status: type === "subscription.expired" ? "expired" : "canceled",
+          raw: JSON.stringify(mainObject).slice(0, 65000),
+        })
+        .where(eq(subscriptionTable.providerSubId, subscriptionId));
+      await deleteSubscriptionSchedule(subscriptionId);
+
+      if (type === "subscription.expired" && subscriptionUserId) {
+        await db
+          .update(userTable)
+          .set({ planKey: "free", subscriptionQueries: 0 })
+          .where(eq(userTable.id, subscriptionUserId));
+      }
+
+      return NextResponse.json({ received: true });
+    }
 
     if (!userId || !key || !kind) {
       // Don't log details to avoid PII exposure
@@ -354,9 +390,13 @@ export async function POST(req: NextRequest) {
 
     await db.transaction(async tx => {
       if (creditsToGrant > 0) {
+        const balanceUpdate = paymentType === "one_time"
+          ? { credits: sql`${userTable.credits} + ${creditsToGrant}` }
+          : { subscriptionQueries: creditsToGrant };
+
         await tx
           .update(userTable)
-          .set({ credits: sql`${userTable.credits} + ${creditsToGrant}` })
+          .set(balanceUpdate)
           .where(eq(userTable.id, userId));
 
         await tx.insert(creditLedger).values({
